@@ -50,21 +50,11 @@ public class ScrollingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scrolling);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         StartStopBtn = findViewById(R.id.StartStopBtn);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
         LogTV = (TextView) findViewById(R.id.AppLogTV);
         ServerLogHandler = new Handler(Looper.getMainLooper());
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolBarLayout.setTitle(getTitle());
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         StartStopBtn.setOnClickListener(new StartStopClickListener(this));
     }
 
