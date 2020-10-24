@@ -17,6 +17,10 @@ public class VirgilClient {
 	private static boolean DoExit = false;
 	
 	public static void main(String[] args) {
+		System.out.println("=====================================");
+		System.out.println("Virgil Client version " + utilities.Constants.Version);
+		System.out.println("=====================================");
+		System.out.println("");
 		while (!DoExit) {
 			System.out.print(utilities.Constants.Prompt);
 			String input = System.console().readLine();
