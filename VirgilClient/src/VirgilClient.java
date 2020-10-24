@@ -10,17 +10,6 @@ import command.Help;
 import command.RunScript;
 import request.*;
 import utilities.*;
-/*
-		ProcessCommandLine("connect",System.out);
-		ProcessCommandLine("run service.info -p com.pinterest -cls com.pinterest.account.AuthenticatorService",System.out);
-		ProcessCommandLine("run package.info -p com.testy",System.out);
-		ProcessCommandLine("run context.startservice -p com.testy -cls com.testy.DataService",System.out);
-		ProcessCommandLine("run sendbroadcast -i com.testy.CUSTOM_INTENT",System.out);
-		ProcessCommandLine("run context.startactivity -p com.pinterest -cls com.pinterest.activity.webhook.WebhookActivity",System.out);
-		ProcessCommandLine("run context.startactivity -p com.pinterest -cls com.pinterest.sdk.PinterestOauthActivity",System.out);		
-		ProcessCommandLine("disconnect",System.out);
-		ProcessCommandLine("exit",System.out);		
- */
 
 public class VirgilClient {
 	
@@ -28,27 +17,17 @@ public class VirgilClient {
 	private static boolean DoExit = false;
 	
 	public static void main(String[] args) {
-		
-		ProcessCommandLine("connect",System.out);
-		ProcessCommandLine("run context.startactivity -p com.pinterest -cls com.pinterest.activity.webhook.WebhookActivity -i android.intent.action.VIEW -c android.intent.category.DEFAULT -d pinterest://http://xxx",System.out);		
-		ProcessCommandLine("disconnect",System.out);
-		ProcessCommandLine("exit",System.out);				
-		return;
-
-		/*
 		while (!DoExit) {
 			System.out.print(utilities.Constants.Prompt);
 			String input = System.console().readLine();
 			ProcessCommandLine(input,System.out);
 		}
-		*/
 	}
 	public static void ProcessCommandLine(String CommandLine,PrintStream OutputStream) {
 		RequestBase CurrentRequest;
-		if (!CommandParser.Parse(CommandLine)) {
-			OutputStream.println("Error parsing: " + CommandLine);			
-		}
-		else {
+		if (!CommandParser.Parse(CommandLine))
+			OutputStream.println("Error parsing: " + CommandLine + " " + ErrorStore.PopErrors());			
+		else
 			switch (CommandParser.CommandType) {
 			case HELP:
 				OutputStream.println(Help.GetHelpText());
@@ -78,12 +57,15 @@ public class VirgilClient {
 					OutputStream.println("Client must be connected before this command can be used.");
 				else {
 					CurrentRequest = RequestFactory.CreateRequest(CommandParser.CommandType,CommandParser.CommandName,CommandParser.CommandModule,CommandParser.CommandArgs);
-					if (CurrentSession.Execute(CurrentRequest))					
-						for (Object pack : CurrentRequest.GetResponseData())					
-							OutputStream.println(pack.toString());
+					if (CurrentRequest == null)
+						OutputStream.println("Error:" + ErrorStore.PopErrors());
 					else
-						OutputStream.println(CurrentSession.GetErrorMessage());									
-				}
+						if (CurrentSession.Execute(CurrentRequest))					
+							for (Object pack : CurrentRequest.GetResponseData())					
+								OutputStream.println(pack.toString());
+						else
+							OutputStream.println(CurrentSession.GetErrorMessage());									
+					}
 				break;
 			case RUNSCRIPT:
 				RunScript CurrentScript = new RunScript(CommandParser.CommandModule,CommandParser.CommandArgs);
@@ -92,7 +74,6 @@ public class VirgilClient {
 			default:
 				OutputStream.println("Unknown command: " + CommandLine);
 			}
-		}
 	}
 	public static void ProcessScriptFile(RunScript CurrentScript) {
 		String ScriptFileName = CurrentScript.GetScriptFilename();

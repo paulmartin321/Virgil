@@ -2,8 +2,30 @@ package request;
 
 import org.w3c.dom.NodeList;
 
+import utilities.ErrorStore;
+
 public class StartActivityRequest extends RequestBase {
 
+	public static boolean ValidArguments(String[] Args) {
+		String[] ArgNames = {"-i","-c","-d","-p","-cls"};
+		int i = 0;
+		while (i < Args.length) {
+			int a = 0;
+			while (a < ArgNames.length) {
+				if (ArgNames[a].equalsIgnoreCase(Args[i]))
+					break;
+				else
+					a++;
+			}
+			if (a >= ArgNames.length) {
+				ErrorStore.AddError("Unknown argument " + Args[i]);
+				return false;
+			}
+			i = i + 2;
+		}
+		return true;
+	}
+	
 	public StartActivityRequest(String RequestName,String[] Args) {
 		super(RequestName,Args);
 	}

@@ -2,6 +2,7 @@ package command;
 
 import utilities.Constants;
 import utilities.Constants.CommandTypes;
+import utilities.ErrorStore;
 
 public class CommandParser {
 	
@@ -16,6 +17,7 @@ public class CommandParser {
 			CommandName = "";
 			CommandModule = "";
 			CommandArgs = new String[0];
+			ErrorStore.AddError("Command Line Empty");
 			return false;
 		}		
 		CommandName = TempParts[0].toUpperCase();
@@ -34,9 +36,8 @@ public class CommandParser {
 		if (TempParts.length == 2) {
 			CommandArgs = new String[0];
 			return true;			
-		}
-		//TODO: make sure CommandArgs is -letter text -letter text etc
-		CommandArgs = TempParts[2].split("\s+");
+		}		
+		CommandArgs = TempParts[2].split("\s+");		
 		return true;
 	}
 }

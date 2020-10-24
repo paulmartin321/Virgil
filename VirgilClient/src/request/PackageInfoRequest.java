@@ -7,10 +7,32 @@ import java.util.List;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import utilities.ErrorStore;
+
 import org.w3c.dom.Node;
 
 public class PackageInfoRequest extends RequestBase {
 
+	public static boolean ValidArguments(String[] Args) {
+		String[] ArgNames = {"-p"};
+		int i = 0;
+		while (i < Args.length) {
+			int a = 0;
+			while (a < ArgNames.length)
+				if (ArgNames[a].equalsIgnoreCase(Args[i]))
+					break;
+				else
+					a++;
+			if (a >= ArgNames.length) {
+				ErrorStore.AddError("Unknown argument " + Args[i]);
+				return false;
+			}
+			i = i + 2;
+		}
+		return true;
+	}
+	
 	public PackageInfoRequest(String RequestName,String[] Args) {
 		super(RequestName,Args);
 	}
@@ -36,9 +58,11 @@ public class PackageInfoRequest extends RequestBase {
 }
 
 class ResponseLoaderBase {
+	
 	public PackageItemInfo CreateItemInfo() {
 		return null;
 	}
+	
 	public void LoadResponseNode(Node ResponseNode) {
 		Node ActivityInfoNode = ResponseNode.getFirstChild();
 		while (ActivityInfoNode != null) {
@@ -201,8 +225,7 @@ class PackageItemInfo {
 	
 	public PackageItemInfo() {
 		
-	}
-	
+	}	
 	public String toString() {
 		return this.name;
 	}

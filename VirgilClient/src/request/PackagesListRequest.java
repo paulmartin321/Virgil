@@ -5,9 +5,14 @@ import org.w3c.dom.NodeList;
 
 public class PackagesListRequest extends RequestBase {
 	
+	public static boolean ValidArguments(String[] Args) {
+		return true;
+	}
+	
 	public PackagesListRequest(String RequestName,String[] Args) {
 		super(RequestName,Args);
 	}
+	
 	public boolean LoadResponseText(String ResponseText) {
 		if (!this.Initialize(ResponseText))
 			return false;
@@ -30,6 +35,7 @@ class PackagesListData {
 	public void SetPackageName(String PackageName) {
 		this.packagename = PackageName;
 	}
+	
 	public PackagesListData() {
 	}
 	
